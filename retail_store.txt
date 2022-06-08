@@ -1,0 +1,31 @@
+create table retail_store(Txn_dt  String,
+Custno  String,
+Age  String,
+Zipcode  String,
+Category  String,
+Product  String,
+Qty  Int,
+Cost  bigint,
+Sales  bigint)Row format delimited
+Fields terminated by '\;';
+
+LOAD DATA LOCAL INPATH 'D01' OVERWRITE INTO TABLE retail_store;
+LOAD DATA LOCAL INPATH 'D02'  INTO TABLE retail_store;
+LOAD DATA LOCAL INPATH 'D11'  INTO TABLE retail_store;
+LOAD DATA LOCAL INPATH 'D12'  INTO TABLE retail_store;
+
+1)   select count(distinct Custno),sum(Sales) ,Age from retail_store where month(Txn_dt) = 1 group by Age; 
+   
+                                           or
+     select count(distinct Custno),sum(Sales) ,Age from retail_store where extract(month from Txn_dt) = 1 group by Age; 
+
+2)
+select product,count(distinct(custno)) as count_of_unique_cust,
+sum(sales) as total_sales from retail_store where trim(age)='A' group by product order by 
+total_sales desc limit 10;
+ 
+3)  select sum(sales),zipcode from retail_store  group by zipcode;     
+
+4)             
+select product, sales-cost as profit from tran group by product order by profit desc limit 10;                
+
